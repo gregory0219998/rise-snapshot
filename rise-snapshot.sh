@@ -45,7 +45,7 @@ create_snapshot() {
   echo " + Creating snapshot"
   echo "--------------------------------------------------"
   echo "..."
-  sudo rm  $SNAPSHOT_DIRECTORYblockchain.db.gz 
+  sudo rm  $SNAPSHOT_DIRECTORY'blockchain.db.gz'
    echo "..."
   sudo su postgres -c "pg_dump -Fp $DB_NAME > $SNAPSHOT_DIRECTORY'blockchain.db'"
   blockHeight=`psql -d $DB_NAME -U $DB_USER -h localhost -p 5432 -t -c "select height from blocks order by height desc limit 1;"`
