@@ -45,9 +45,11 @@ create_snapshot() {
   echo " + Creating snapshot"
   echo "--------------------------------------------------"
   echo "..."
-  sudo su postgres -c "pg_dump -Ft $DB_NAME > $SNAPSHOT_DIRECTORY'rise_db$NOW.snapshot.tar'"
+  sudo rm  $SNAPSHOT_DIRECTORY/blockchain.db.gz
+  sudo su postgres -c "pg_dump -Fp $DB_NAME > $SNAPSHOT_DIRECTORY'blockchain.db'"
   blockHeight=`psql -d $DB_NAME -U $DB_USER -h localhost -p 5432 -t -c "select height from blocks order by height desc limit 1;"`
   dbSize=`psql -d $DB_NAME -U $DB_USER -h localhost -p 5432 -t -c "select pg_size_pretty(pg_database_size('$DB_NAME'));"`
+  sudo gzip snapshot/blockchain.db
 
   if [ $? != 0 ]; then
     echo "X Failed to create snapshot." | tee -a $SNAPSHOT_LOG
@@ -61,7 +63,7 @@ create_snapshot() {
 restore_snapshot(){
   echo " + Restoring snapshot"
   echo "--------------------------------------------------"
-  SNAPSHOT_FILE=`ls -t snapshot/rise_db* | head  -1`
+  SNAPSHOT_FILE=`ls -t snapshot/blockchain.db.gz | head  -1`
   if [ -z "$SNAPSHOT_FILE" ]; then
     echo "****** No snapshot to restore, please consider create it first"
     echo " "
