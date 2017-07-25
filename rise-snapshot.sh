@@ -7,7 +7,8 @@ export LANGUAGE=en_US.UTF-8
 
 #============================================================
 #= snapshot.sh v0.2 created by mrgr                         =
-#= Please consider voting for delegate mrgr                 =
+#= Please consider voting for delegate mrgr      
+#= Modified by gregorst
 #============================================================
 echo " "
 
